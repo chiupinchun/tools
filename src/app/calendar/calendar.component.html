@@ -1,1 +1,23 @@
-<p>calendar works!</p>
+<h2>行事曆</h2>
+<div class="flex flex-col items-center md:flex-row md:justify-between md:items-start">
+  <mat-card class="w-80 md:w-5/12">
+    <mat-calendar [(selected)]="selected"></mat-calendar>
+    <div class="mx-auto w-fit">
+      @if(selected !== null) {
+      <p class="text-white">
+        選擇日期：
+        {{selected.toLocaleDateString()}}
+      </p>
+      }
+    </div>
+  </mat-card>
+  <mat-card class="mt-5 md:mt-0 w-80 md:w-5/12">
+    <mat-list>
+      <mat-list-item>Item 1</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>Item 2</mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>Item 3</mat-list-item>
+    </mat-list>
+  </mat-card>
+</div>
