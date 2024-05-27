@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { routes } from '@/app.routes';
+import { routesWithoutHome } from '@/app.routes';
 import { twMerge } from 'tailwind-merge';
 
 const SCROLL_DEBOUNCE_TIME = 50
@@ -12,7 +12,7 @@ const SCROLL_DEBOUNCE_TIME = 50
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
-  routes = routes
+  routes = routesWithoutHome
   isTop = true
   isScrolling = false
 
