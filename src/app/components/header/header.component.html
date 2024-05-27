@@ -1,0 +1,16 @@
+<header [class]="twMerge(
+  'w-full bg-pink-300 bg-opacity-25 overflow-hidden transition-all',
+  isTop ? '' : 'fixed',
+  isScrolling ? '-top-96 max-h-0' : 'top-0 max-h-96'
+)">
+  <div class="container mx-auto header-content">
+    <h1>
+      <a href="">檸檬森林工具包</a>
+    </h1>
+    <nav>
+      @for (route of routes; track route.path) {
+        <a [href]="route.path" class="p-2">{{ route.title }}</a>
+      }
+    </nav>
+  </div>
+</header>
