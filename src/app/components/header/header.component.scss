@@ -1,0 +1,8 @@
+h1 {
+  margin-bottom: 0;
+}
+
+.header-content {
+  @apply flex justify-between items-center;
+  height: var(--header-height);
+}

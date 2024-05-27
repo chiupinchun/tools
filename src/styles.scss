@@ -2,5 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --header-height: 4rem;
+  --container-width: 1024px;
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
