@@ -1,8 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>NMSL</div>
-  <HelloWorld msg="Vite + Vue" />
+  <div class="text-pink-300">NMSL</div>
 </template>
 
 <style scoped></style>
