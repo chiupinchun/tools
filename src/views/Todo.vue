@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import draggable from "vuedraggable";
 import {
   getTodos,
@@ -11,16 +11,33 @@ import {
   type TodoStatus,
   type Priority,
   saveToStorage,
-} from "@/api/todo";
+} from "@/api/modules/todo";
 import TodoItem from "@/components/todo/TodoItem.vue";
+import { useFetch } from "@/api/core";
 
 const statusList: TodoStatus[] = ["new", "doing", "done"];
 
-const groupedTodos = ref<Record<TodoStatus, Todo[]>>({
-  new: [],
-  doing: [],
-  done: [],
-});
+interface GroupedTodos {
+  new: Todo[];
+  doing: Todo[];
+  done: Todo[];
+}
+
+const { data: groupedTodos, refresh: refreshTodos } = useFetch<GroupedTodos>(
+  () =>
+    getTodos().then((data) => ({
+      new: data.filter((t) => t.status === "new"),
+      doing: data.filter((t) => t.status === "doing"),
+      done: data.filter((t) => t.status === "done"),
+    })),
+  {
+    defaultValue: {
+      new: [],
+      doing: [],
+      done: [],
+    },
+  }
+);
 
 const isFormShow = ref(false);
 const currentStatus = ref<TodoStatus>("new");
@@ -44,28 +61,14 @@ const resetForm = () => {
   editingTodoId.value = null;
 };
 
-const load = async () => {
-  const all = await getTodos();
-  groupedTodos.value = {
-    new: all.filter((t) => t.status === "new"),
-    doing: all.filter((t) => t.status === "doing"),
-    done: all.filter((t) => t.status === "done"),
-  };
-};
-
 const handleDelete = async (id: number) => {
-  const updated = await deleteTodo(id);
-  statusList.forEach((status) => {
-    groupedTodos.value[status] = updated.filter((t) => t.status === status);
-  });
+  await deleteTodo(id);
+  refreshTodos();
 };
 
 const handleClearDone = async () => {
-  const updated = await clearDone();
-  groupedTodos.value.done = [];
-  statusList.forEach((status) => {
-    groupedTodos.value[status] = updated.filter((t) => t.status === status);
-  });
+  await clearDone();
+  refreshTodos();
 };
 
 const handleEdit = (todo: Todo) => {
@@ -85,26 +88,16 @@ const handleSubmit = async () => {
   if (!title.trim()) return;
 
   if (isEditing.value && editingTodoId.value !== null) {
-    const updated = await updateTodo(editingTodoId.value, {
+    await updateTodo(editingTodoId.value, {
       title,
       description,
       priority,
     });
-    groupedTodos.value[currentStatus.value] = updated.filter(
-      (t) => t.status === currentStatus.value
-    );
   } else {
-    const updated = await addTodo(
-      title,
-      description,
-      currentStatus.value,
-      priority
-    );
-    groupedTodos.value[currentStatus.value] = updated.filter(
-      (t) => t.status === currentStatus.value
-    );
+    await addTodo(title, description, currentStatus.value, priority);
   }
 
+  refreshTodos();
   resetForm();
   isFormShow.value = false;
 };
@@ -125,8 +118,6 @@ const onDragEnd = () => {
 
   saveToStorage([...newItems, ...doingItems, ...doneItems]);
 };
-
-onMounted(load);
 </script>
 
 <template>

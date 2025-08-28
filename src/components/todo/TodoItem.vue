@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Todo } from "@/api/todo";
+import type { Todo } from "@/api/modules/todo";
 import { computed } from "vue";
 
 const props = defineProps<{
