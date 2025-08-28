@@ -13,6 +13,7 @@ import {
   saveToStorage,
 } from "@/api/modules/todo";
 import TodoItem from "@/components/todo/TodoItem.vue";
+import Typewriter from "@/components/ui/Typewriter.vue";
 import { useFetch } from "@/api/core";
 
 const statusList: TodoStatus[] = ["new", "doing", "done"];
@@ -125,8 +126,10 @@ const onDragEnd = () => {
     <div
       class="bg-gradient-to-r from-blue-600 to-primary rounded-lg p-6 mb-8 shadow text-white"
     >
-      <h1 class="text-3xl font-bold tracking-wide">任務清單</h1>
-      <p class="text-sm opacity-80 mt-1">管理、編輯、清單拖曳一次搞定</p>
+      <h1 class="text-2xl font-bold tracking-wide">任務清單</h1>
+      <p class="text-sm opacity-80 mt-1">
+        <Typewriter text="管理、編輯、清單拖曳一次搞定" />
+      </p>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
