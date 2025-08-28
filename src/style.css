@@ -1,1 +1,6 @@
 @import "tailwindcss" important;
+@custom-variant dark (&:where(.dark, .dark *));
+
+a {
+  text-decoration: none;
+}
