@@ -9,6 +9,12 @@ export interface Todo {
   priority: Priority;
 }
 
+export interface GroupedTodos {
+  new: Todo[];
+  doing: Todo[];
+  done: Todo[];
+}
+
 const STORAGE_KEY = "todo";
 
 function loadFromStorage(): Todo[] {
