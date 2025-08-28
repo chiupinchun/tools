@@ -76,8 +76,7 @@ const navItems = [
 
 // 切換深淺色主題
 const toggleTheme = () => {
-  theme.global.name.value =
-    theme.global.name.value === "light" ? "dark" : "light";
+  theme.change(theme.global.name.value === "light" ? "dark" : "light");
 };
 
 const themeIcon = computed(() =>
