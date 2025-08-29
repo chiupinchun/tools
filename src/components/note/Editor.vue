@@ -102,12 +102,8 @@ const onSave = () => {
         auto-grow
         rows="10"
         variant="outlined"
-        class="rounded-lg"
-        :class="
-          darkMode
-            ? 'bg-gray-800 text-gray-100 border-gray-700 focus-within:border-primary-500'
-            : 'bg-white text-gray-900 border-gray-300 focus-within:border-primary-600'
-        "
+        class="note-editor-input rounded-lg"
+        :class="darkMode ? 'dark' : ''"
       />
     </div>
 
@@ -126,12 +122,8 @@ const onSave = () => {
       clearable
       hide-details
       variant="outlined"
-      class="rounded-lg"
-      :class="
-        darkMode
-          ? 'bg-gray-800 text-gray-100 border-gray-700 focus-within:border-primary-500'
-          : 'bg-white text-gray-900 border-gray-300 focus-within:border-primary-600'
-      "
+      class="note-editor-input rounded-lg"
+      :class="darkMode ? 'dark' : ''"
     />
 
     <div class="flex justify-end gap-4 mt-6">
@@ -149,4 +141,14 @@ const onSave = () => {
   </v-card>
 </template>
 
-<style scoped></style>
+<style scoped>
+@reference "tailwindcss";
+
+.note-editor-input:not(.dark) {
+  @apply bg-white text-gray-900 border-gray-300;
+}
+
+.note-editor-input.dark {
+  @apply bg-gray-800 text-gray-100 border-gray-700;
+}
+</style>
