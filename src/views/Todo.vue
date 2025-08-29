@@ -118,27 +118,25 @@ const onDragEnd = () => {
 </script>
 
 <template>
-  <v-container>
-    <div
-      class="bg-gradient-to-r from-blue-600 to-primary rounded-lg p-6 mb-8 shadow text-white"
-    >
-      <h1 class="text-2xl font-bold tracking-wide">任務清單</h1>
-      <p class="text-sm opacity-80 mt-1">
-        <Typewriter text="管理、編輯、清單拖曳一次搞定" />
-      </p>
-    </div>
+  <div
+    class="bg-gradient-to-r from-blue-600 to-primary rounded-lg p-6 mb-8 shadow text-white"
+  >
+    <h1 class="text-2xl font-bold tracking-wide">任務清單</h1>
+    <p class="text-sm opacity-80 mt-1">
+      <Typewriter text="管理、編輯、清單拖曳一次搞定" />
+    </p>
+  </div>
 
-    <TodoList
-      :data="groupedTodos"
-      @add="onAddItem"
-      @clear-done="onClearDone"
-      @drag-end="onDragEnd"
-    >
-      <template #item="{ todoItem }">
-        <TodoItem :todo="todoItem" @delete="onDeleteItem" @edit="onEditItem" />
-      </template>
-    </TodoList>
-  </v-container>
+  <TodoList
+    :data="groupedTodos"
+    @add="onAddItem"
+    @clear-done="onClearDone"
+    @drag-end="onDragEnd"
+  >
+    <template #item="{ todoItem }">
+      <TodoItem :todo="todoItem" @delete="onDeleteItem" @edit="onEditItem" />
+    </template>
+  </TodoList>
 
   <!-- 表單 Dialog -->
   <v-dialog v-model="isFormShow" max-width="500">

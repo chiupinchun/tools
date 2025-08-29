@@ -19,7 +19,9 @@ watch(
     <Header />
 
     <v-main>
-      <RouterView />
+      <v-container>
+        <RouterView />
+      </v-container>
     </v-main>
   </v-app>
 </template>
