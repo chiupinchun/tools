@@ -8,7 +8,7 @@ import NoteEdit from "@/views/note/Edit.vue";
 const routes = [
   { path: "/todo", component: Todo },
   { path: "/note", component: NoteList },
-  { path: "/note/edit", component: NoteEdit },
+  { path: "/note/create", component: NoteEdit },
   { path: "/note/:id/edit", component: NoteEdit },
   { path: "/", component: Home },
 ];
