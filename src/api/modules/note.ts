@@ -18,8 +18,64 @@ export function saveToStorage(notes: Note[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
 }
 
-export async function getNotes(): Promise<Note[]> {
-  return loadFromStorage();
+export interface GetNotesPayload {
+  keyword: string;
+  fromCreated: string | null;
+  toCreated: string | null;
+  fromUpdated: string | null;
+  toUpdated: string | null;
+}
+
+export async function getNotes(
+  payload: Partial<GetNotesPayload> = {}
+): Promise<Note[]> {
+  const notes = loadFromStorage();
+  const { keyword, fromCreated, toCreated, fromUpdated, toUpdated } = payload;
+  return notes.filter((note) => {
+    if (keyword) {
+      const matched =
+        note.title.includes(keyword) ||
+        note.content.includes(keyword) ||
+        note.tags.some((tag) => tag.includes(keyword));
+      if (!matched) {
+        return false;
+      }
+    }
+
+    if (fromCreated) {
+      const fromDate = +new Date(fromCreated);
+      const matched = note.createdAt > fromDate;
+      if (!matched) {
+        return false;
+      }
+    }
+
+    if (toCreated) {
+      const toDate = +new Date(toCreated);
+      const matched = note.createdAt < toDate;
+      if (!matched) {
+        return false;
+      }
+    }
+
+    if (fromUpdated) {
+      const fromDate = +new Date(fromUpdated);
+      const matched = note.createdAt > fromDate;
+      if (!matched) {
+        return false;
+      }
+    }
+
+    if (toUpdated) {
+      const toDate = +new Date(toUpdated);
+      const matched = note.createdAt < toDate;
+      if (!matched) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 }
 
 export function getNoteById(id: number): Promise<Note | null> {

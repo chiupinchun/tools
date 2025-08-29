@@ -1,12 +1,19 @@
 <script lang="ts" setup>
 import { useFetch } from "@/api/core";
-import { getNotes, type Note } from "@/api/modules/note";
+import { getNotes, type GetNotesPayload, type Note } from "@/api/modules/note";
 import { useRouter } from "vue-router";
 import PreviewNote from "@/components/note/PreviewNote.vue";
 import NoteFilter from "@/components/note/Filter.vue";
+import { ref } from "vue";
 
 const router = useRouter();
-const { data: notes } = useFetch(getNotes, { defaultValue: [] });
+
+const getNotesPayload = ref<Partial<GetNotesPayload>>({});
+
+const { data: notes } = useFetch(() => getNotes(getNotesPayload.value), {
+  defaultValue: [],
+  watch: [getNotesPayload],
+});
 
 const goToEdit = (note: Note) => {
   router.push(`/note/${note.id}/edit`);
@@ -15,9 +22,10 @@ const goToEdit = (note: Note) => {
 
 <template>
   <div class="p-4">
-    <div class="mb-4">
-      <NoteFilter />
-    </div>
+    <NoteFilter
+      class="mb-4"
+      @search="(paylaod) => (getNotesPayload = paylaod)"
+    />
 
     <div class="space-y-4">
       <PreviewNote
