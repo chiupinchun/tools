@@ -1,18 +1,22 @@
 <template>
-  <Typewriter :text="messages[messageIndex]" @next="messageIndex++" auto-next />
+  <div></div>
 </template>
 
 <script lang="ts" setup>
-import Typewriter from "@/components/ui/Typewriter.vue";
-import { ref } from "vue";
+import { useSettingStore } from "@/stores/setting";
+import { watch } from "vue";
+import { useRouter } from "vue-router";
 
-const messages = [
-  "早安安安安安安安安安安安安安安安安安安安安",
-  "午安安安安安安安安安安安安安安安安安安安安",
-  "晚安安安安安安安安安安安安安安安安安安安安",
-];
+const router = useRouter();
+const settingStore = useSettingStore();
 
-const messageIndex = ref(0);
+watch(
+  () => settingStore.defaultHome,
+  (path) => {
+    router.push(`/${path}`);
+  },
+  { immediate: true }
+);
 </script>
 
 <style lang="scss" scoped></style>

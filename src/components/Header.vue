@@ -15,46 +15,50 @@
         Hato工具包
       </RouterLink>
 
-      <!-- 導覽列（大螢幕顯示） -->
-      <div class="d-none d-sm-flex items-center space-x-6">
-        <RouterLink
-          v-for="item in navItems"
-          :key="item.to"
-          :to="item.to"
-          class="text-gray-700 dark:text-gray-300 hover:text-primary transition"
-          active-class="text-primary font-bold"
-        >
-          {{ item.label }}
-        </RouterLink>
-      </div>
+      <div v-if="offWorkCountdown">下班倒數：{{ offWorkCountdown }}</div>
 
-      <!-- 功能區域（右側） -->
-      <div class="d-flex align-center space-x-1">
-        <!-- 主題切換按鈕 -->
-        <v-btn icon variant="text" @click="toggleTheme">
-          <v-icon>{{ themeIcon }}</v-icon>
-        </v-btn>
+      <div class="flex gap-10">
+        <!-- 導覽列（大螢幕顯示） -->
+        <div class="d-none d-sm-flex items-center space-x-6">
+          <RouterLink
+            v-for="item in navItems"
+            :key="item.to"
+            :to="item.to"
+            class="text-gray-700 dark:text-gray-300 hover:text-primary transition"
+            active-class="text-primary font-bold"
+          >
+            {{ item.label }}
+          </RouterLink>
+        </div>
 
-        <!-- 行動裝置選單按鈕 -->
-        <v-menu location="bottom end">
-          <template #activator="{ props }">
-            <v-btn v-bind="props" icon class="d-sm-none">
-              <v-icon>mdi-menu</v-icon>
-            </v-btn>
-          </template>
+        <!-- 功能區域（右側） -->
+        <div class="d-flex align-center space-x-1">
+          <!-- 主題切換按鈕 -->
+          <v-btn icon variant="text" @click="toggleTheme">
+            <v-icon>{{ themeIcon }}</v-icon>
+          </v-btn>
 
-          <v-list>
-            <v-list-item
-              v-for="item in navItems"
-              :key="item.to"
-              :to="item.to"
-              link
-              :active="route.path === item.to"
-            >
-              <v-list-item-title>{{ item.label }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+          <!-- 行動裝置選單按鈕 -->
+          <v-menu location="bottom end">
+            <template #activator="{ props }">
+              <v-btn v-bind="props" icon class="d-sm-none">
+                <v-icon>mdi-menu</v-icon>
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item
+                v-for="item in navItems"
+                :key="item.to"
+                :to="item.to"
+                link
+                :active="route.path === item.to"
+              >
+                <v-list-item-title>{{ item.label }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
       </div>
     </v-container>
   </v-app-bar>
@@ -64,14 +68,35 @@
 import { useRoute } from "vue-router";
 import { computed } from "vue";
 import { useTheme } from "vuetify";
+import { useSettingStore } from "@/stores/setting";
+import { formatTimeDifference } from "@/utils/time";
 
 const route = useRoute();
 const theme = useTheme();
+
+const settingStore = useSettingStore();
+
+const offWorkCountdown = computed(() => {
+  if (!settingStore.offWorkTime) {
+    return null;
+  }
+
+  const now = new Date();
+  const toDay = now.toLocaleDateString();
+  const offworkTime = new Date(`${toDay} ${settingStore.offWorkTime}`);
+
+  if (now > offworkTime) {
+    return "已經該下班了！";
+  }
+
+  return formatTimeDifference(offworkTime, now);
+});
 
 // 導覽列項目（未來可擴充）
 const navItems = [
   { to: "/todo", label: "待辦清單" },
   { to: "/note", label: "筆記" },
+  { to: "/setting", label: "設定" },
 ];
 
 // 切換深淺色主題
