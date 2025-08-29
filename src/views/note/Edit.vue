@@ -27,10 +27,6 @@ const { data: note, refresh: refreshNote } = useFetch(
 
 const isSavedDialogOpen = ref(false);
 
-const onCancel = () => {
-  refreshNote();
-};
-
 const onSave = async (noteData: Pick<Note, "title" | "content" | "tags">) => {
   const isEdit = !!id.value;
   if (isEdit) {
@@ -48,7 +44,7 @@ const goBackToList = () => {
 </script>
 
 <template>
-  <NoteEditor :note="note" @cancel="onCancel" @save="onSave" />
+  <NoteEditor :note="note" @cancel="goBackToList" @save="onSave" />
 
   <v-dialog v-model="isSavedDialogOpen" persistent max-width="400">
     <v-card>
