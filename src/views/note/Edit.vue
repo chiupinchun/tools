@@ -20,7 +20,7 @@ const id = computed(() => {
   return id && Number(id);
 });
 
-const { data: note, refresh: refreshNote } = useFetch(
+const { data: note } = useFetch(
   () => (id.value ? getNoteById(Number(id.value)) : Promise.resolve(null)),
   { watch: [id] }
 );
