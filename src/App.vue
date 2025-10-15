@@ -2,11 +2,7 @@
 import { useTheme } from "vuetify";
 import Header from "./components/Header.vue";
 import { watch } from "vue";
-import { useKeyboard } from "./composables/useKeyboard";
-import { useSettingStore } from "./stores/setting";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
+import { useShortcut } from '@/composables/useShortcut'
 
 const theme = useTheme();
 
@@ -18,26 +14,7 @@ watch(
   { immediate: true }
 );
 
-const settingStore = useSettingStore();
-const { pressedKeys } = useKeyboard();
-
-watch(
-  [() => settingStore.shortcuts, pressedKeys],
-  ([shortCuts, pressedKeys]) => {
-    switch (pressedKeys.join("+")) {
-      case shortCuts.goNote:
-        router.push("/note");
-        break;
-      case shortCuts.goSetting:
-        router.push("/setting");
-        break;
-      case shortCuts.goTodo:
-        router.push("/todo");
-        break;
-    }
-  },
-  { immediate: true }
-);
+useShortcut()
 </script>
 
 <template>
