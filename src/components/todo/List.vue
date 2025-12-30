@@ -66,7 +66,9 @@ const emit = defineEmits<Emits>();
         class="space-y-2"
       >
         <template #item="{ element }">
-          <slot name="item" :todo-item="element as Todo" />
+          <div class="cursor-pointer">
+            <slot name="item" :todo-item="element as Todo" />
+          </div>
         </template>
       </draggable>
 
