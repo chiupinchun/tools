@@ -1,6 +1,11 @@
 <script lang="ts" setup>
 import { useFetch } from "@/api/core";
-import { getNotes, type GetNotesPayload, type Note } from "@/api/modules/note";
+import {
+  deleteNote,
+  getNotes,
+  type GetNotesPayload,
+  type Note,
+} from "@/api/modules/note";
 import { useRouter } from "vue-router";
 import PreviewNote from "@/components/note/PreviewNote.vue";
 import NoteFilter from "@/components/note/Filter.vue";
@@ -12,10 +17,13 @@ const router = useRouter();
 
 const getNotesPayload = ref<Partial<GetNotesPayload>>({});
 
-const { data: notes } = useFetch(() => getNotes(getNotesPayload.value), {
-  defaultValue: [],
-  watch: [getNotesPayload],
-});
+const { data: notes, refresh } = useFetch(
+  () => getNotes(getNotesPayload.value),
+  {
+    defaultValue: [],
+    watch: [getNotesPayload],
+  }
+);
 
 const displayConfig = ref<{
   sort: BaseSortCondition;
@@ -40,6 +48,25 @@ const goToCreate = () => {
 const goToEdit = (note: Note) => {
   router.push(`/note/${note.id}/edit`);
 };
+
+const noteToDelete = ref<Note | null>(null);
+const isDeleteNoteModalShow = computed({
+  get: () => !!noteToDelete.value,
+  set: (value: boolean) => {
+    if (!value) {
+      noteToDelete.value = null;
+    }
+  },
+});
+
+const onDelete = () => {
+  if (noteToDelete.value) {
+    deleteNote(noteToDelete.value.id);
+  }
+
+  isDeleteNoteModalShow.value = false;
+  refresh();
+};
 </script>
 
 <template>
@@ -59,7 +86,22 @@ const goToEdit = (note: Note) => {
         :note="note"
         class="cursor-pointer"
         @click="goToEdit(note)"
+        @delete="noteToDelete = note"
       />
     </div>
   </div>
+
+  <v-dialog v-model="isDeleteNoteModalShow" max-width="400">
+    <v-card>
+      <v-card-title> 確定要刪除嗎？ </v-card-title>
+      <v-card-text> 刪除後將無法復原。 </v-card-text>
+
+      <v-card-actions class="justify-end">
+        <v-btn variant="text" @click="isDeleteNoteModalShow = false"
+          >取消</v-btn
+        >
+        <v-btn color="red" @click="onDelete">確定</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>

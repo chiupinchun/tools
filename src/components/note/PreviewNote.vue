@@ -5,17 +5,29 @@ interface Props {
   note: Note;
 }
 defineProps<Props>();
+
+interface Emits {
+  (e: "delete"): void;
+}
+const emit = defineEmits<Emits>();
 </script>
 
 <template>
   <div
     class="border rounded-lg p-4 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md transition"
   >
-    <div class="flex justify-between items-start mb-2">
+    <div class="relative flex justify-between items-start mb-2">
       <h2 class="text-lg font-semibold line-clamp-1">{{ note.title }}</h2>
       <span class="text-xs text-gray-500">{{
         new Date(note.createdAt).toLocaleDateString()
       }}</span>
+
+      <v-btn
+        @click.stop="emit('delete')"
+        class="absolute right-0 top-0 opacity-0 transition-all duration-250 hover:opacity-50"
+        size="small"
+        icon="mdi-close"
+      />
     </div>
 
     <div class="flex flex-wrap gap-2 mb-3">
