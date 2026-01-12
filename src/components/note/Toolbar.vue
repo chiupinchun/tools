@@ -59,7 +59,7 @@ const sortOptions: {
         <v-btn-toggle
           v-model="gridCols"
           density="compact"
-          class="w-full md:w-auto space-x-2"
+          class="w-full md:w-auto space-x-2 max-sm:hidden"
         >
           <v-btn :value="1" icon rounded
             ><v-icon>mdi-view-agenda</v-icon></v-btn

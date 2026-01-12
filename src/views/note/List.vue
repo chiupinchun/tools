@@ -79,7 +79,12 @@ const onDelete = () => {
       @create="goToCreate"
     />
 
-    <div class="space-y-4">
+    <div
+      :class="`grid gap-4 max-sm:grid-cols-1`"
+      :style="{
+        gridTemplateColumns: `repeat(${displayConfig.gridCols}, minmax(0, 1fr))`,
+      }"
+    >
       <PreviewNote
         v-for="note in displayedNotes"
         :key="note.id"
