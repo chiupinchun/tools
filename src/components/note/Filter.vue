@@ -20,6 +20,7 @@ const searchForm = ref<GetNotesPayload>(getDefaultForm());
 
 const resetForm = () => {
   searchForm.value = getDefaultForm();
+  onSearch();
 };
 
 const onSearch = () => {
